@@ -1,0 +1,40 @@
+<script src="tinytest.js"></script>
+<script src="librarySystem.js"></script>
+<script>
+
+  tests({
+
+    'It should have a way to create library': function(){
+      librarySystem('dependency', [], function(){
+        return 'dependency';
+      })
+      var dependency = librarySystem('dependency')
+      eq(dependency, 'dependency');
+    },
+
+    'It should has a way to create library with dependencies':function(){
+      librarySystem('app', ['dependency'], function(dependency){
+        return 'I am app with ' + dependency;
+      })
+      var app = librarySystem('app');
+      eq(app, 'I am app with dependency')
+    },
+
+    'It should has a way to create libary out of order':function(){
+      librarySystem('app2', ['dependency1', 'dependency2'], function(dependency1, dependency2){
+        return `I am app with ${dependency1} and ${dependency2}`;
+      })
+
+      librarySystem('dependency1', [], function(){
+        return 'dependency1'
+      })
+
+      librarySystem('dependency2', [], function(){
+        return 'dependency2'
+      })
+      var app2 = librarySystem('app2')
+      eq(app2, 'I am app with dependency1 and dependency2')
+    }
+  })
+
+</script>
